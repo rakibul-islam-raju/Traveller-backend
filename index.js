@@ -44,6 +44,14 @@ async function run() {
 			res.send({ count, result });
 		});
 
+		// single api [EVENT]
+		app.get("/event/:id", async (req, res) => {
+			const _id = req.params.id;
+			const query = { _id: ObjectId(_id) };
+			const result = await eventsCollection.findOne(query);
+			res.json(result);
+		});
+
 		// post api [EVENT]
 		app.post("/events", async (req, res) => {
 			const newEvent = req.body;
