@@ -65,6 +65,47 @@ async function run() {
 			const result = await registerCollection.insertOne(newRegister);
 			res.send(result);
 		});
+
+		// get all registrations [REGISTER]
+		app.get("/register-list", async (req, res) => {
+			let cursor;
+			if (req.query.email) {
+				const _email = req.query.email;
+				const query = { email: _email };
+				cursor = registerCollection.find(query);
+			} else {
+				cursor = registerCollection.find({});
+			}
+			const result = await cursor.toArray();
+			res.send(result);
+		});
+
+		// update register [REGISTER]
+		app.put("/register/:id", async (req, res) => {
+			const _id = req.params.id;
+			const updatedRegister = req.body;
+			const filter = { _id: ObjectId(_id) };
+			const options = { upsert: true };
+			const updateDoc = {
+				$set: {
+					status: updatedRegister.status,
+				},
+			};
+			const result = await registerCollection.updateOne(
+				filter,
+				updateDoc,
+				options
+			);
+			res.json(result);
+		});
+
+		// delete api [REGISTER]
+		app.delete("/register/:id", async (req, res) => {
+			const _id = req.params.id;
+			const query = { _id: ObjectId(_id) };
+			const result = await registerCollection.deleteOne(query);
+			res.json(result);
+		});
 	} finally {
 		// await client.close()
 	}
