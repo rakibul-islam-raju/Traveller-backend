@@ -24,6 +24,7 @@ async function run() {
 		await client.connect();
 		const databse = client.db("traveller");
 		const eventsCollection = databse.collection("events");
+		const blogCollection = databse.collection("blog");
 		const registerCollection = databse.collection("register");
 
 		// list api [EVENT]
@@ -105,6 +106,20 @@ async function run() {
 			const query = { _id: ObjectId(_id) };
 			const result = await registerCollection.deleteOne(query);
 			res.json(result);
+		});
+
+		// post api [BLOG]
+		app.post("/blog", async (req, res) => {
+			const newBlog = req.body;
+			const result = await blogCollection.insertOne(newBlog);
+			res.send(result);
+		});
+
+		// get all registrations [REGISTER]
+		app.get("/blog", async (req, res) => {
+			cursor = blogCollection.find({}).sort({ $natural: -1 }).limit(4);
+			const result = await cursor.toArray();
+			res.send(result);
 		});
 	} finally {
 		// await client.close()
