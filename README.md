@@ -10,4 +10,4 @@ Website Features:
 -   Registration delete api
 -   Blog post api
 
-#### Live site: [Traveller](https://traveller-server-api.herokuapp.com/)
+#### Live site: [Traveller](https://traveller-e2bb8.web.app/)
